@@ -9,7 +9,7 @@ No external dependencies.
 
 Speech data has become central to Computational Psychiatry research in recent years. The physics of sound creates opportunity to extract more features that reveal information beyond baseline linguistic information: PTSD may cause more pauses and hesitation in speech, an anxious person may speak at a higher pitch... In general, voice quality may change shape under cognitive load or emotional pressure. Clinicians do these things intuitively; on the other hand, in objective computation, the quality of analysis depends on the integrity of the data (audio file).
 
-The PCM encoding method and WAV file format is preferred for speech analysis because the data remains close to original from source and features are not lost to compression. Sound waves in the form of longitudinal air pressure waves are captured by a microphone and converted to voltage signals by a transducer. To become computable, this continuous voltage signal is captured in snapshots at regular intervals and quantized by the analog to digital converter (ADC), then recorded as binary digits on the computer's memory chip, ready to be read.
+The PCM encoding method and WAV file format is preferred for speech analysis because the data remains close to original from the gritysource, and features are not lost to compression,much unlike MP3. Sound waves in the form of longitudinal air pressure waves are captured by a microphone and converted to voltage signals by a transducer. To become computable, this continuous voltage signal is captured in snapshots at regular intervals and quantized by the analog to digital converter (ADC), then recorded as binary digits on the computer's memory chip, ready to be read.
 
 The ultimate goal of analysis is to extract meaningful acoustic features from the speech signal, but before that, saved speech data has to be processed. Fundamentally, we are first interested in knowing the baseline status, so we look for information such as the size of the audio file, the format, sample rate, and if it was recorded as mono or stereo. This metadata gives us a starting point of how to better understand and handle our data.
 
@@ -34,7 +34,7 @@ Reads a WAV file in binary mode and extracts:
 - Duration in seconds
 - Raw PCM audio bytes
 
-Handles JUNK chunks, which audio software sometimes inserts between the RIFF header and the fmt subchunk as padding.
+Handles JUNK, LIST, fact, and other chunk types some audio software inserts before the fmt subchunk or between fmt and data, and accounts for RIFF's even-byte chunk padding and extended format chunks.
 
 ---
 
@@ -66,16 +66,17 @@ All numeric fields are little-endian. Chunk ID labels are big-endian ASCII text.
 python3 wav_parser.py
 ```
 
-Runs on `sample.wav` included in this repo.
+Runs on `sample.wav` by default since thats included in this repo. pass a different file if you want to parse something else:
+
+```bash
+python3 wav_parser.py path/to/your.wav
+```
 
 ---
 
 ## Limitations
 
-- File path is currently hardcoded to `sample.wav`
-- Assumes a JUNK chunk exists between the RIFF header and the `fmt` subchunk. Will break on wav files without one.
-- Flat script with no class structure.
-- No error handling on chunk ID decoding yet.
+- Flat script, no class structure. works fine as is, just not built as a reusable module yet
 
 ---
 
